@@ -6,7 +6,17 @@
 
 ### Matchmaking
 
+#### client-side
+
+- client.joinOrCreate()
+- client.create()
+- client.join()
+- client.joinById()
+- client.reconnect()
+
 ### Room State & Serialization
+
+- demo: src/rooms
 
 ### @colyseus/schema
 
@@ -15,3 +25,6 @@
 ### Sending Message
 
 ### Reconnection
+
+- client-side: src/client-side/Reconnection
+- server-side: src/rooms/reconnection
