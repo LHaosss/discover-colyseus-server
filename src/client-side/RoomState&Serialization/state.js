@@ -10,6 +10,8 @@ client.joinOrCreate("state").then((room) => {
       JoinOrCreate Successfully`
   );
 
+  rm = room;
+
   room.onMessage("reply", function (message) {
     console.log("msg received from reply:", message);
   });
@@ -20,12 +22,22 @@ client.joinOrCreate("state").then((room) => {
   });
 
   room.onStateChange((state) => {
-    console.log("state changed:", state["players"][room.sessionId]);
-  });
+    state.listen("numberField", (value, previousValue) => {
+      console.log("previousValue:", previousValue);
+      console.log("currentValue", value);
+    });
 
-  rm = room;
+    state.listen("players", (value, previousValue) => {
+      console.log(
+        "previousValue:",
+        previousValue ? previousValue[room.sessionId].position : previousValue
+      );
+      console.log("currentValue", value[room.sessionId].position);
+    });
+  });
 });
 
 function sendMoveMessage() {
   rm.send("move", { move: 3 });
+  console.log(rm.state["numberField"]);
 }

@@ -15,12 +15,17 @@ export class StateRoom extends Room<StateRoomState> {
         console.log("player:", player.position);
       });
 
+      this.state.numberField++;
+      console.log("numberField:", this.state.numberField);
+
       client.send("reply", { message: "move event has been solved" });
     });
   }
 
   onJoin(client: Client) {
     console.log("client.sessionId:", client.sessionId);
-    this.state.players.set(client.sessionId, new Player());
+    const player = new Player();
+    player.id = client.sessionId;
+    this.state.players.set(client.sessionId, player);
   }
 }
