@@ -6,23 +6,29 @@
 
 ### Matchmaking
 
-#### client-side
+- client-side
+  - client.joinOrCreate()
+  - client.create()
+  - client.join()
+  - client.joinById()
+  - client.reconnect()
+- server-side
+  - Room
 
-- client.joinOrCreate()
-- client.create()
-- client.join()
-- client.joinById()
-- client.reconnect()
-
-### Room State & Serialization
+### Room State & Serialization & filter
 
 - demo: src/rooms/state
 
-### @colyseus/schema
-
-### StateFilters
-
 ### Sending Message
+
+- Room Method:
+
+  - boradcast(type, message, options?)
+
+- Client Method:
+
+  - send(type, message)
+  - sendBytes(type, bytes)
 
 ### Reconnection
 
