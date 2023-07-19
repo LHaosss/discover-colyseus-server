@@ -6,7 +6,6 @@ export class StateRoom extends Room<StateRoomState> {
     this.setState(new StateRoomState());
 
     this.onMessage("move", (client: Client, message) => {
-      console.log(message.move);
       this.state.players.forEach((player, key) => {
         if (message.move) {
           if (key === client.sessionId) {
@@ -15,10 +14,13 @@ export class StateRoom extends Room<StateRoomState> {
         }
         console.log("player:", player.position);
       });
+
+      client.send("reply", { message: "move event has been solved" });
     });
   }
 
   onJoin(client: Client) {
+    console.log("client.sessionId:", client.sessionId);
     this.state.players.set(client.sessionId, new Player());
   }
 }

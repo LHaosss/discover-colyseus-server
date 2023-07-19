@@ -1,11 +1,14 @@
 import {
   Schema,
-  type,
   ArraySchema,
   MapSchema,
   SetSchema,
   CollectionSchema,
+  type,
+  filter,
 } from "@colyseus/schema";
+
+import { Client } from "@colyseus/core";
 
 export class ComplexTypes extends Schema {
   @type("number")
@@ -19,6 +22,17 @@ export class ComplexTypes extends Schema {
 }
 
 export class Player extends Schema {
+  @type("string")
+  id: string;
+
+  @filter(function (
+    this: Player,
+    client: Client,
+    value: Player["position"],
+    root: Schema
+  ) {
+    return this.id === client.sessionId;
+  })
   @type("number")
   position: number = 0;
 }

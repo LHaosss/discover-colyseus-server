@@ -16,7 +16,7 @@
 
 ### Room State & Serialization
 
-- demo: src/rooms
+- demo: src/rooms/state
 
 ### @colyseus/schema
 
