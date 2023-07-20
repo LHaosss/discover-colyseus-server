@@ -4,27 +4,73 @@ import { PhaserRoomState, Player } from "./schema/PhaserRoomState";
 export class PhaserRoom extends Room<PhaserRoomState> {
   maxClients = 4;
 
+  elapsedTime = 0;
+  fixedTimeStep: number = 1000 / 60;
+
+  fixedTick(deltaTime: number) {
+    const velocity = 2;
+
+    this.state.players.forEach((player) => {
+      let input: any;
+
+      while ((input = player.inputQueue.shift())) {
+        if (input.left) {
+          player.x -= velocity;
+        } else if (input.right) {
+          player.x += velocity;
+        }
+
+        if (input.up) {
+          player.y -= velocity;
+        } else if (input.down) {
+          player.y += velocity;
+        }
+      }
+    });
+  }
+
+  update(deltaTime: number) {
+    const velocity = 2;
+
+    this.state.players.forEach((player) => {
+      let input: any;
+
+      // dequeue player inputs
+      while ((input = player.inputQueue.shift())) {
+        if (input.left) {
+          player.x -= velocity;
+        } else if (input.right) {
+          player.x += velocity;
+        }
+
+        if (input.up) {
+          player.y -= velocity;
+        } else if (input.down) {
+          player.y += velocity;
+        }
+      }
+    });
+  }
+
   onCreate(options: any) {
     this.setState(new PhaserRoomState());
 
     console.log("Joined successfully!");
 
-    this.onMessage(0, (client, message) => {
-      // get reference to the player who sent the message
+    this.onMessage(0, (client, input) => {
+      // handle player input
       const player = this.state.players.get(client.sessionId);
-      const velocity = 2;
 
-      if (message.left) {
-        player.x -= velocity;
-      }
-      if (message.right) {
-        player.x += velocity;
-      }
-      if (message.up) {
-        player.y -= velocity;
-      }
-      if (message.down) {
-        player.y += velocity;
+      // enqueue input to user input buffer.
+      player.inputQueue.push(input);
+    });
+
+    this.setSimulationInterval((deltaTime) => {
+      this.elapsedTime += deltaTime;
+
+      while (this.elapsedTime >= this.fixedTimeStep) {
+        this.elapsedTime -= this.fixedTimeStep;
+        this.fixedTick(this.fixedTimeStep);
       }
     });
   }

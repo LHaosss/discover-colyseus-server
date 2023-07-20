@@ -22,6 +22,9 @@ export default config({
 
     // match by phaser client demo
     gameServer.define("phaser", PhaserRoom);
+
+    // 用来模拟网络延时，体验用户使用时遇到延时的感受
+    gameServer.simulateLatency(200);
   },
   initializeExpress: (app) => {
     /**
